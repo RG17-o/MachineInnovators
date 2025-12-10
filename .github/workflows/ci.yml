@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test_and_train:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,8 @@ jobs:
     - name: Run tests
       run: |
         pytest
+
+    - name: Run training
+      run: |
+        python src/train.py
+    
