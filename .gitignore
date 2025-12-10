@@ -1,0 +1,4 @@
+__pycache__/
+*/__pycache__/
+
+# Ignoro le cartelle pycache create da Python
