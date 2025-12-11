@@ -1,4 +1,4 @@
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, Trainer, TrainingArguments
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, DataCollatorWithPadding, Trainer, TrainingArguments
 from datasets import load_dataset
 import torch
 
@@ -21,6 +21,9 @@ def main():
     # Settaggio di feature e label
     tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
     tokenized_datasets.set_format("torch", columns=["input_ids", "attention_mask", "labels"])
+
+    # Creo il Data Collator (necessario per il padding dinamico nel batch)
+    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     # Parametri di training
     training_args = TrainingArguments(
