@@ -5,3 +5,4 @@ evaluate
 numpy
 gradio
 pytest
+accelerate>=0.26.0 # Dipendenza richiesta da Hugging Face Transformers per l'accelerazione del training su più GPU
