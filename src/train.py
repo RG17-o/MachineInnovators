@@ -21,6 +21,9 @@ def main():
     # Settaggio di feature e label
     tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
 
+    # Rimuovo le colonne originali non necessarie al Trainer
+    tokenized_datasets = tokenized_datasets.remove_columns(["sentence", "idx"])
+
     # Creo il Data Collator (necessario per il padding dinamico nel batch)
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
@@ -45,7 +48,9 @@ def main():
         args=training_args,
         train_dataset=tokenized_datasets["train"],
         eval_dataset=tokenized_datasets["validation"],
-    )
+        data_collator=data_collator,
+        tokenizer=tokenizer,
+)
 
     # Avvio il training
     trainer.train()
