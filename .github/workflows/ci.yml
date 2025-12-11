@@ -30,4 +30,4 @@ jobs:
 
     - name: Run training
       run: |
-        python src/train.py --num_train_epochs 1
+        python src/train.py --num_train_epochs 1 --max_samples 1000

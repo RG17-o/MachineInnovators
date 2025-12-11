@@ -1,3 +1,4 @@
+import argparse
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, DataCollatorWithPadding, Trainer, TrainingArguments
 from datasets import load_dataset
 import torch
@@ -6,11 +7,25 @@ MODEL_NAME = "cardiffnlp/twitter-roberta-base-sentiment-latest"
 
 def main():
     # Carico tokenizer e modello pre-addestrato
+    # Aggiungo argomento per numero di campioni
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--num_train_epochs", type=int, default=1, help="Number of training epochs.")
+    parser.add_argument("--max_samples", type=int, default=0, help="Max number of samples to use for smoke test (0=full dataset).") # NUOVO ARGOMENTO
+    args = parser.parse_args()
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
 
     # Carico dataset di esempio (SST2)
     dataset = load_dataset("glue", "sst2")
+
+    # Limito il datasetper smoke test
+
+    if args.max_samples > 0:
+        dataset["train"] = dataset["train"].select(range(min(args.max_samples, len(dataset["train"]))))
+        # Limita anche validation e test per sicurezza
+        dataset["validation"] = dataset["validation"].select(range(min(100, len(dataset["validation"]))))
+        dataset["test"] = dataset["test"].select(range(min(100, len(dataset["test"]))))
+        print(f"ATTENZIONE: Limitato dataset per smoke test a {len(dataset['train'])} campioni.")
 
     # Funzione di tokenizzazione
     def tokenize_function(examples):
@@ -34,7 +49,7 @@ def main():
         learning_rate=2e-5,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
-        num_train_epochs=3,
+        num_train_epochs= args.num_train_epochs,
         weight_decay=0.01,
         save_total_limit=1,
         save_strategy="epoch",
