@@ -20,7 +20,6 @@ def main():
 
     # Settaggio di feature e label
     tokenized_datasets = tokenized_datasets.rename_column("label", "labels")
-    tokenized_datasets.set_format("torch", columns=["input_ids", "attention_mask", "labels"])
 
     # Creo il Data Collator (necessario per il padding dinamico nel batch)
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
