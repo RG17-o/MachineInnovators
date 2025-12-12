@@ -2,8 +2,24 @@ import argparse
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, DataCollatorWithPadding, Trainer, TrainingArguments
 from datasets import load_dataset
 import torch
+from sklearn.metrics import accuracy_score
+import numpy as np 
 
 MODEL_NAME = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+
+def compute_metrics(eval_pred):
+    # eval_pred è una tupla con predictions e labels
+    predictions, labels = eval_pred 
+    
+    # Prendo l'indice della classe con il punteggio più alto (argmax)
+    predictions = np.argmax(predictions, axis=1)
+
+    # Calcolo l'accuratezza
+    accuracy = accuracy_score(labels, predictions)
+    
+    # Il Trainer si aspetta un dizionario
+    return {"accuracy": accuracy}
+
 
 def main():
     # Carico tokenizer e modello pre-addestrato
@@ -65,7 +81,8 @@ def main():
         eval_dataset=tokenized_datasets["validation"],
         data_collator=data_collator,
         tokenizer=tokenizer,
-)
+        compute_metrics=compute_metrics,
+        )
 
     # Avvio il training
     trainer.train()
