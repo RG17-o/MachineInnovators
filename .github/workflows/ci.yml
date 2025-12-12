@@ -31,3 +31,17 @@ jobs:
     - name: Run training
       run: |
         python src/train.py --num_train_epochs 1 --max_samples 1000
+    
+    - name: Installazione libreria per CD
+      run: |
+        # Necessario per interagire con l'Hub di Hugging Face
+        pip install huggingface_hub
+
+    - name: Carico il Modello su Hugging Face Hub
+      # Imposto una condizione per cui eseguo il deploy solo se il commit è sul branch 'main' e se i test precedenti hanno avuto successo
+      if: success() && github.ref == 'refs/heads/main'
+      env:
+        # Usao il Secret che ho creato per questo scopo
+        HF_ACCESS_TOKEN: ${{ secrets.HF_TOKEN }} 
+      run: |
+        python -c "from huggingface_hub import HfApi; api = HfApi(); api.upload_folder(folder_path='./trained_model', repo_id='HRick17/sentiment-model', repo_type='model', commit_message='Deploy CI/CD automatico')"
