@@ -10,6 +10,10 @@ jobs:
   test_and_train:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write # permette al workflow di accedere al contenuto del repository
+      id-token: write # Permette al workflow di generare un ID token per l'autenticazione con servizi esterni
+
     steps:
     - uses: actions/checkout@v3
 
@@ -44,4 +48,6 @@ jobs:
         # Usao il Secret che ho creato per questo scopo
         HF_ACCESS_TOKEN: ${{ secrets.HF_TOKEN }} 
       run: |
+        pip install huggingface_hub
+        python -c "from huggingface_hub import login; login('${{ secrets.HF_TOKEN }}')"
         python -c "from huggingface_hub import HfApi; api = HfApi(); api.upload_folder(folder_path='./trained_model', repo_id='HRick17/machine-innovators', repo_type='model', commit_message='Deploy CI/CD automatico')"
