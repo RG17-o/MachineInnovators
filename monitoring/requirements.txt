@@ -1,1 +1,5 @@
 prometheus_client
+torch # Necessario per l'esecuzione del modello e i tensori
+transformers # Per caricare il modello
+datasets # Per caricare il dataset di validazione
+numpy # Per il calcolo finale dell'accuratezza
