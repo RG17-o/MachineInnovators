@@ -29,6 +29,14 @@ services:
     #  - GF_SECURITY_ADMIN_PASSWORD=admin     # Imposta le credenziali di accesso di default
     restart: unless-stopped
 
+  exporter:
+      build: .
+      image: machineinnovators/exporter:latest
+      container_name: ml-exporter
+      ports:
+        - "8000:8000"
+      restart: unless-stopped
+
 volumes:
   prometheus_data:
   grafana_data:
