@@ -60,3 +60,7 @@ Fatto ciò, le metriche saranno visibili su Grafana all'indirizzo localhost:3000
 **- Risultati Ottenuti**
 
 Il sistema è in grado di processare flussi di dati social e fornire un feedback immediato sulla reputazione aziendale. Grazie al monitoraggio continuo, MachineInnovators garantisce che l'accuratezza rimanga stabile nel tempo, permettendo risposte tempestive ai cambiamenti di sentiment degli utenti.
+
+Riporto una immagine, relativa all'accuracy, proveniente dalla dashboard creata su Grafana:
+
+![Dashboard Accuratezza Grafana](grafana-accuracy.png)
