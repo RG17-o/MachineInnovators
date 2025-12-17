@@ -5,10 +5,8 @@ from prometheus_client import start_http_server, Gauge
 from datasets import load_dataset 
 from torch.utils.data import DataLoader
 
-# Importa la funzione dal tuo modulo model.py (richiede che src/ sia copiato nel container)
+# Importo la funzione dal tuo modulo model.py (richiede che src/ sia copiato nel container)
 from src.model import load_model_and_tokenizer 
-# NOTA: Assicurati che il tuo model.py sia aggiornato con le funzioni necessarie
-# e che il Dockerfile copi src/ e imposti il PYTHONPATH.
 
 # --- CONFIGURAZIONE E CARICAMENTO ---
 # Carica il modello e il tokenizer solo una volta all'avvio
@@ -24,18 +22,18 @@ model.to(DEVICE)
 print("Caricamento e tokenizzazione dataset di validazione...")
 dataset = load_dataset("tweet_eval", "sentiment")
 
-# Funzione di tokenizzazione (copiata dal tuo notebook)
+# Funzione di tokenizzazione (copiata dal notebook colab)
 def preprocess_function(examples):
     return tokenizer(examples["text"], truncation=True, padding="max_length", max_length=128)
 
 tokenized_validation_set = dataset["validation"].map(preprocess_function, batched=True)
 tokenized_validation_set.set_format(type="torch", columns=["input_ids", "attention_mask", "label"])
 
-# Creiamo il DataLoader per iterare i dati
+# Creo il DataLoader per iterare i dati
 val_loader = DataLoader(tokenized_validation_set, batch_size=16) 
 
 
-# --- LOGICA DI PROMETHEUS ---
+# --- LOGICA DELL'EXPORTER PROMETHEUS ---
 # 1. Definisco la Metrica
 ACCURACY_GAUGE = Gauge('ml_model_accuracy', 'Accuratezza del modello ML sul set di validazione')
 
@@ -47,18 +45,18 @@ def calculate_validation_accuracy():
     all_preds = []
     all_labels = []
     
-    model.eval() # Imposta il modello in modalità valutazione
+    model.eval() # Imposto il modello in modalità valutazione
     with torch.no_grad():
         for batch in val_loader:
-            # Sposta i dati sul device
+            # Sposto i dati sul device
             input_ids = batch["input_ids"].to(DEVICE)
             attention_mask = batch["attention_mask"].to(DEVICE)
             
-            # Esegui l'inferenza
+            # Eseguo l'inferenza
             outputs = model(input_ids=input_ids, attention_mask=attention_mask)
             logits = outputs.logits
             
-            # Calcola le predizioni e sposta su CPU per l'aggregazione
+            # Calcolo le predizioni e sposto su CPU per l'aggregazione
             preds = torch.argmax(logits, dim=1).cpu() 
             labels = batch["label"].cpu()            
             
@@ -74,7 +72,7 @@ def calculate_validation_accuracy():
     return accuracy
 
 def collect_metrics():
-    """Calcola l'accuratezza e aggiorna il Gauge di Prometheus."""
+    """Calcolo l'accuratezza e aggiorna il Gauge di Prometheus."""
     
     # Esegui il calcolo costoso dell'accuratezza
     accuracy = calculate_validation_accuracy()
@@ -85,7 +83,7 @@ def collect_metrics():
     print(f"Metrica aggiornata: Accuratezza sul Validation Set = {accuracy:.4f}")
 
 if __name__ == '__main__':
-    # Avvia il server HTTP per esporre le metriche sulla porta 8000
+    # Avvio il server HTTP per esporre le metriche sulla porta 8000
     start_http_server(8000)
     print("Exporter avviato sulla porta 8000.")
     
