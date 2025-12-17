@@ -5,6 +5,7 @@ MachineInnovators Inc. sviluppa soluzioni di Machine Learning pronte per la prod
 
 
 **- Architettura e Scelte Progettuali**
+
  *-1. Il Modello: Da FastText a RoBERTa*
 Sebbene la traccia iniziale prevedesse l'utilizzo FastText , ho scelto di implementare il modello multilingua Twitter-RoBERTa-base (cardiffnlp/twitter-roberta-base-sentiment-latest).
 Il motivo di questa scelta da parte mia risiede nel fatto che RoBERTa utilizza l'architettura Transformer, in grado di comprendere il contesto e le sfumature del linguaggio (ad esempio l'ironia) meglio rispetto ai modelli basati su word-embeddings statici come FastText. Essendo pre-addestrato dettagliatamente su contenuti derivanti da Twitter, è ideale per essere applicato al contesto dei social media.
@@ -41,6 +42,7 @@ tests/: Suite di test per garantire la stabilità del codice.
 .github/workflows/: Definizione della pipeline CI/CD.
 
 **- Come Iniziare**
+
 *-1. Inferenza Locale*
 Per testare rapidamente il modello è possibile digitare direttamente nel terminale:
 
