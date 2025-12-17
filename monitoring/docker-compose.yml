@@ -30,7 +30,9 @@ services:
     restart: unless-stopped
 
   exporter:
-      build: .
+      build:
+        context: .. # Sposto il "mirino" di Docker guardando alla cartella principale (MachineInnovators)
+        dockerfile: monitoring/Dockerfile # Indico a Docker dove trovare il file nonostante il cambio di contesto
       image: machineinnovators/exporter:latest
       container_name: ml-exporter
       ports:
