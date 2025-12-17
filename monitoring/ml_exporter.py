@@ -89,8 +89,8 @@ if __name__ == '__main__':
     start_http_server(8000)
     print("Exporter avviato sulla porta 8000.")
     
-    # Loop continuo per aggiornare le metriche (una volta ogni 10 minuti)
+    # Loop continuo per aggiornare le metriche (una volta ogni 5 minuti)
     while True:
         collect_metrics()
-        # Tempo di attesa in secondi (5 minuti = 10s)
-        time.sleep(10)
+        # Tempo di attesa in secondi (5 minuti = 300s)
+        time.sleep(30)
