@@ -63,4 +63,4 @@ Il sistema è in grado di processare flussi di dati social e fornire un feedback
 
 Riporto una immagine, relativa all'accuracy, proveniente dalla dashboard creata su Grafana:
 
-![Dashboard Accuratezza Grafana](grafana-accuracy.png)
+![Dashboard Accuratezza Grafana](images/grafana-accuracy.png)
