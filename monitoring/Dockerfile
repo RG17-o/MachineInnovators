@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copio il codice dell'exporter
 # Copio il modulo principale (ml_exporter.py) e la cartella dei sorgenti (src/)
 COPY ml_exporter.py .
-COPY src/ src/  # <--- COPIA L'INTERA CARTELLA src/
+COPY src/ src/  
 
 # Aggiungo /app al PYTHONPATH in modo che gli script possano trovare i moduli in src/
 ENV PYTHONPATH /app:${PYTHONPATH} # <--- Imposta la variabile d'ambiente
