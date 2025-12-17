@@ -91,4 +91,4 @@ if __name__ == '__main__':
     while True:
         collect_metrics()
         # Tempo di attesa in secondi (5 minuti = 300s)
-        time.sleep(30)
+        time.sleep(300)
